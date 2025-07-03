@@ -1,63 +1,22 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import FlashcardCounter from './FlashcardCounter';
+import SubjectCarousel from './SubjectCarousel';
 import { 
-  BookOpen, 
   Users, 
-  Trophy, 
   Star, 
-  ChevronRight, 
   Play, 
   CheckCircle,
   ArrowRight,
   GraduationCap,
-  Clock,
   Award,
-  TrendingUp
+  Infinity,
+  Crown
 } from 'lucide-react';
 
 const EdTechHomepage = () => {
-  const subjects = [
-    {
-      title: "Mathematics",
-      description: "Master calculus, algebra, and advanced mathematical concepts",
-      icon: <TrendingUp className="h-8 w-8" />,
-      courses: 24,
-      students: "15K+",
-      rating: 4.9,
-      price: "$89"
-    },
-    {
-      title: "Computer Science",
-      description: "Learn programming, algorithms, and software development",
-      icon: <BookOpen className="h-8 w-8" />,
-      courses: 32,
-      students: "22K+",
-      rating: 4.8,
-      price: "$129"
-    },
-    {
-      title: "Physics",
-      description: "Explore quantum mechanics, thermodynamics, and more",
-      icon: <Trophy className="h-8 w-8" />,
-      courses: 18,
-      students: "8K+",
-      rating: 4.7,
-      price: "$99"
-    },
-    {
-      title: "Chemistry",
-      description: "Understand molecular structures and chemical reactions",
-      icon: <Award className="h-8 w-8" />,
-      courses: 21,
-      students: "12K+",
-      rating: 4.8,
-      price: "$94"
-    }
-  ];
-
   const testimonials = [
     {
       name: "Sarah Johnson",
@@ -84,47 +43,51 @@ const EdTechHomepage = () => {
 
   const pricingPlans = [
     {
-      name: "Basic",
-      price: "$29",
-      period: "/month",
-      description: "Perfect for getting started",
+      name: "Student",
+      price: "$49",
+      period: "one-time",
+      description: "Perfect for individual learners",
       features: [
-        "Access to 5 courses",
+        "Access to 3 subjects",
         "Basic progress tracking",
         "Community forum access",
-        "Mobile app access"
+        "Mobile app access",
+        "Lifetime access"
       ],
-      popular: false
+      popular: false,
+      icon: <GraduationCap className="h-6 w-6" />
     },
     {
-      name: "Pro",
-      price: "$79",
-      period: "/month",
-      description: "Most popular for serious learners",
+      name: "Scholar",
+      price: "$149",
+      period: "one-time",
+      description: "Most popular for serious students",
       features: [
-        "Access to all courses",
+        "Access to all subjects",
         "Advanced analytics",
-        "1-on-1 mentoring sessions",
         "Priority support",
         "Downloadable resources",
-        "Certificate of completion"
+        "Certificate of completion",
+        "Lifetime updates"
       ],
-      popular: true
+      popular: true,
+      icon: <Award className="h-6 w-6" />
     },
     {
-      name: "Enterprise",
-      price: "$199",
-      period: "/month",
-      description: "For teams and organizations",
+      name: "Master",
+      price: "$299",
+      period: "one-time",
+      description: "For academic excellence",
       features: [
-        "Everything in Pro",
-        "Team management",
-        "Custom learning paths",
+        "Everything in Scholar",
+        "Personal study coach",
+        "Custom study plans",
+        "Advanced reporting",
         "API access",
-        "Dedicated support",
-        "Advanced reporting"
+        "White-label option"
       ],
-      popular: false
+      popular: false,
+      icon: <Crown className="h-6 w-6" />
     }
   ];
 
@@ -139,7 +102,7 @@ const EdTechHomepage = () => {
               <span className="text-2xl font-bold text-gradient">EduMaster</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#courses" className="text-foreground hover:text-primary transition-colors">Courses</a>
+              <a href="#subjects" className="text-foreground hover:text-primary transition-colors">Subjects</a>
               <a href="#about" className="text-foreground hover:text-primary transition-colors">About</a>
               <a href="#pricing" className="text-foreground hover:text-primary transition-colors">Pricing</a>
               <Button variant="outline" className="mr-2">Log In</Button>
@@ -183,58 +146,19 @@ const EdTechHomepage = () => {
                 4.9/5 Rating
               </div>
               <div className="flex items-center">
-                <Trophy className="h-4 w-4 mr-2 text-primary" />
-                95% Success Rate
+                <Infinity className="h-4 w-4 mr-2 text-primary" />
+                Lifetime Access
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Subjects/Courses Section */}
-      <section id="courses" className="py-20 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">
-              Choose Your Subject
-            </h2>
-            <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
-              Explore our comprehensive catalog of subjects taught by industry experts and top educators.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {subjects.map((subject, index) => (
-              <Card key={index} className="group hover:scale-105 transition-all duration-300 cursor-pointer border-border/50 hover:border-primary/50 bg-card/50 backdrop-blur-sm">
-                <CardHeader className="text-center pb-4">
-                  <div className="mx-auto mb-4 p-3 rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                    {subject.icon}
-                  </div>
-                  <CardTitle className="text-xl mb-2">{subject.title}</CardTitle>
-                  <CardDescription className="text-sm">{subject.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <div className="flex justify-between items-center text-sm text-foreground/60 mb-4">
-                    <span>{subject.courses} courses</span>
-                    <span>{subject.students} students</span>
-                  </div>
-                  <div className="flex items-center justify-center mb-4">
-                    <Star className="h-4 w-4 text-primary mr-1" />
-                    <span className="font-semibold">{subject.rating}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-primary">{subject.price}</span>
-                    <Button size="sm" className="group-hover:bg-primary group-hover:text-primary-foreground">
-                      Enroll Now
-                      <ChevronRight className="ml-1 h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Flashcard Counter Section */}
+      <FlashcardCounter />
+
+      {/* Subject Carousel Section */}
+      <SubjectCarousel />
 
       {/* Testimonials Section */}
       <section className="py-20 bg-card/20">
@@ -282,7 +206,7 @@ const EdTechHomepage = () => {
               Choose Your Plan
             </h2>
             <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
-              Flexible pricing options to fit your learning needs and budget.
+              One-time payment for lifetime access. No subscriptions, no recurring fees.
             </p>
           </div>
           
@@ -295,10 +219,13 @@ const EdTechHomepage = () => {
                   </Badge>
                 )}
                 <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 p-3 rounded-2xl bg-primary/10 text-primary w-fit">
+                    {plan.icon}
+                  </div>
                   <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
                   <div className="mb-4">
                     <span className="text-4xl font-bold text-primary">{plan.price}</span>
-                    <span className="text-foreground/60">{plan.period}</span>
+                    <span className="text-foreground/60 ml-2">{plan.period}</span>
                   </div>
                   <CardDescription>{plan.description}</CardDescription>
                 </CardHeader>
@@ -312,7 +239,7 @@ const EdTechHomepage = () => {
                     ))}
                   </ul>
                   <Button className={`w-full ${plan.popular ? 'animate-pulse-glow' : ''}`} variant={plan.popular ? 'default' : 'outline'}>
-                    Get Started
+                    Enrol Now
                   </Button>
                 </CardContent>
               </Card>
@@ -385,7 +312,7 @@ const EdTechHomepage = () => {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-border/50 text-center text-foreground/60">
-            <p>&copy; 2024 EduMaster. All rights reserved.</p>
+            &copy; 2024 EduMaster. All rights reserved.
           </div>
         </div>
       </footer>
