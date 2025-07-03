@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import FlashcardCounter from './FlashcardCounter';
 import SubjectCarousel from './SubjectCarousel';
@@ -8,12 +9,9 @@ import {
   Users, 
   Star, 
   Play, 
-  CheckCircle,
   ArrowRight,
   GraduationCap,
-  Award,
-  Infinity,
-  Crown
+  Infinity
 } from 'lucide-react';
 
 const EdTechHomepage = () => {
@@ -41,56 +39,6 @@ const EdTechHomepage = () => {
     }
   ];
 
-  const pricingPlans = [
-    {
-      name: "Student",
-      price: "$49",
-      period: "one-time",
-      description: "Perfect for individual learners",
-      features: [
-        "Access to 3 subjects",
-        "Basic progress tracking",
-        "Community forum access",
-        "Mobile app access",
-        "Lifetime access"
-      ],
-      popular: false,
-      icon: <GraduationCap className="h-6 w-6" />
-    },
-    {
-      name: "Scholar",
-      price: "$149",
-      period: "one-time",
-      description: "Most popular for serious students",
-      features: [
-        "Access to all subjects",
-        "Advanced analytics",
-        "Priority support",
-        "Downloadable resources",
-        "Certificate of completion",
-        "Lifetime updates"
-      ],
-      popular: true,
-      icon: <Award className="h-6 w-6" />
-    },
-    {
-      name: "Master",
-      price: "$299",
-      period: "one-time",
-      description: "For academic excellence",
-      features: [
-        "Everything in Scholar",
-        "Personal study coach",
-        "Custom study plans",
-        "Advanced reporting",
-        "API access",
-        "White-label option"
-      ],
-      popular: false,
-      icon: <Crown className="h-6 w-6" />
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -104,7 +52,7 @@ const EdTechHomepage = () => {
             <div className="hidden md:flex items-center space-x-8">
               <a href="#subjects" className="text-foreground hover:text-primary transition-colors">Subjects</a>
               <a href="#about" className="text-foreground hover:text-primary transition-colors">About</a>
-              <a href="#pricing" className="text-foreground hover:text-primary transition-colors">Pricing</a>
+              <a href="#testimonials" className="text-foreground hover:text-primary transition-colors">Reviews</a>
               <Button variant="outline" className="mr-2">Log In</Button>
               <Button className="animate-pulse-glow">Sign Up</Button>
             </div>
@@ -161,7 +109,7 @@ const EdTechHomepage = () => {
       <SubjectCarousel />
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-card/20">
+      <section id="testimonials" className="py-20 bg-card/20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">
@@ -191,56 +139,6 @@ const EdTechHomepage = () => {
                       <p className="text-sm text-foreground/60">{testimonial.role}</p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">
-              Choose Your Plan
-            </h2>
-            <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
-              One-time payment for lifetime access. No subscriptions, no recurring fees.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {pricingPlans.map((plan, index) => (
-              <Card key={index} className={`relative ${plan.popular ? 'ring-2 ring-primary scale-105' : ''} bg-card/80 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-all duration-300`}>
-                {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
-                    Most Popular
-                  </Badge>
-                )}
-                <CardHeader className="text-center">
-                  <div className="mx-auto mb-4 p-3 rounded-2xl bg-primary/10 text-primary w-fit">
-                    {plan.icon}
-                  </div>
-                  <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
-                  <div className="mb-4">
-                    <span className="text-4xl font-bold text-primary">{plan.price}</span>
-                    <span className="text-foreground/60 ml-2">{plan.period}</span>
-                  </div>
-                  <CardDescription>{plan.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center">
-                        <CheckCircle className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                        <span className="text-foreground/80">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button className={`w-full ${plan.popular ? 'animate-pulse-glow' : ''}`} variant={plan.popular ? 'default' : 'outline'}>
-                    Enrol Now
-                  </Button>
                 </CardContent>
               </Card>
             ))}

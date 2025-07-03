@@ -9,81 +9,81 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 295 86% 52%;
+    --background: 260 30% 15%;
     --foreground: 48 100% 88%;
 
-    --card: 295 70% 45%;
+    --card: 260 25% 20%;
     --card-foreground: 48 100% 92%;
 
-    --popover: 295 70% 45%;
+    --popover: 260 25% 20%;
     --popover-foreground: 48 100% 92%;
 
     --primary: 48 100% 70%;
-    --primary-foreground: 295 86% 52%;
+    --primary-foreground: 260 30% 15%;
 
-    --secondary: 295 60% 40%;
+    --secondary: 260 20% 25%;
     --secondary-foreground: 48 100% 92%;
 
-    --muted: 295 50% 35%;
+    --muted: 260 15% 30%;
     --muted-foreground: 48 25% 75%;
 
     --accent: 48 100% 70%;
-    --accent-foreground: 295 86% 52%;
+    --accent-foreground: 260 30% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 295 60% 40%;
-    --input: 295 60% 40%;
+    --border: 260 20% 25%;
+    --input: 260 20% 25%;
     --ring: 48 100% 70%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 295 86% 52%;
+    --sidebar-background: 260 30% 15%;
     --sidebar-foreground: 48 100% 88%;
     --sidebar-primary: 48 100% 70%;
-    --sidebar-primary-foreground: 295 86% 52%;
-    --sidebar-accent: 295 60% 40%;
+    --sidebar-primary-foreground: 260 30% 15%;
+    --sidebar-accent: 260 20% 25%;
     --sidebar-accent-foreground: 48 100% 92%;
-    --sidebar-border: 295 60% 40%;
+    --sidebar-border: 260 20% 25%;
     --sidebar-ring: 48 100% 70%;
   }
 
   .dark {
-    --background: 295 86% 52%;
+    --background: 260 30% 15%;
     --foreground: 48 100% 88%;
 
-    --card: 295 70% 45%;
+    --card: 260 25% 20%;
     --card-foreground: 48 100% 92%;
 
-    --popover: 295 70% 45%;
+    --popover: 260 25% 20%;
     --popover-foreground: 48 100% 92%;
 
     --primary: 48 100% 70%;
-    --primary-foreground: 295 86% 52%;
+    --primary-foreground: 260 30% 15%;
 
-    --secondary: 295 60% 40%;
+    --secondary: 260 20% 25%;
     --secondary-foreground: 48 100% 92%;
 
-    --muted: 295 50% 35%;
+    --muted: 260 15% 30%;
     --muted-foreground: 48 25% 75%;
 
     --accent: 48 100% 70%;
-    --accent-foreground: 295 86% 52%;
+    --accent-foreground: 260 30% 15%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 295 60% 40%;
-    --input: 295 60% 40%;
+    --border: 260 20% 25%;
+    --input: 260 20% 25%;
     --ring: 48 100% 70%;
-    --sidebar-background: 295 86% 52%;
+    --sidebar-background: 260 30% 15%;
     --sidebar-foreground: 48 100% 88%;
     --sidebar-primary: 48 100% 70%;
-    --sidebar-primary-foreground: 295 86% 52%;
-    --sidebar-accent: 295 60% 40%;
+    --sidebar-primary-foreground: 260 30% 15%;
+    --sidebar-accent: 260 20% 25%;
     --sidebar-accent-foreground: 48 100% 92%;
-    --sidebar-border: 295 60% 40%;
+    --sidebar-border: 260 20% 25%;
     --sidebar-ring: 48 100% 70%;
   }
 }
@@ -107,11 +107,11 @@ All colors MUST be HSL.
     right: 0;
     bottom: 0;
     background: 
-      radial-gradient(circle at 20% 20%, hsl(260, 40%, 25%) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, hsl(260, 35%, 22%) 0%, transparent 50%),
-      radial-gradient(circle at 40% 60%, hsl(260, 30%, 20%) 0%, transparent 50%),
-      linear-gradient(135deg, hsl(260, 25%, 18%) 0%, hsl(260, 30%, 20%) 50%, hsl(260, 25%, 18%) 100%);
-    z-index: -2;
+      radial-gradient(circle at 20% 20%, hsl(260, 35%, 12%) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, hsl(260, 30%, 10%) 0%, transparent 50%),
+      radial-gradient(circle at 40% 60%, hsl(260, 25%, 8%) 0%, transparent 50%),
+      linear-gradient(135deg, hsl(260, 30%, 8%) 0%, hsl(260, 25%, 12%) 50%, hsl(260, 30%, 8%) 100%);
+    z-index: -3;
   }
 
   body::after {
@@ -122,22 +122,46 @@ All colors MUST be HSL.
     right: 0;
     bottom: 0;
     background-image: 
-      radial-gradient(circle at 10% 10%, hsl(48, 100%, 70%, 0.03) 0%, transparent 25%),
-      radial-gradient(circle at 90% 20%, hsl(48, 100%, 70%, 0.02) 0%, transparent 25%),
-      radial-gradient(circle at 30% 80%, hsl(48, 100%, 70%, 0.03) 0%, transparent 25%),
-      radial-gradient(circle at 70% 90%, hsl(48, 100%, 70%, 0.02) 0%, transparent 25%);
+      radial-gradient(circle at 10% 10%, hsl(48, 100%, 70%, 0.02) 0%, transparent 25%),
+      radial-gradient(circle at 90% 20%, hsl(48, 100%, 70%, 0.015) 0%, transparent 25%),
+      radial-gradient(circle at 30% 80%, hsl(48, 100%, 70%, 0.02) 0%, transparent 25%),
+      radial-gradient(circle at 70% 90%, hsl(48, 100%, 70%, 0.015) 0%, transparent 25%);
+    z-index: -2;
+  }
+
+  /* Studying logos background pattern */
+  body::before {
+    content: '📚 ✏️ 🎓 📖 🔬 ⚗️ 📐 🧮 🏆 💡 🎯 📊 📝 🔍 💻 🌟 📚 ✏️ 🎓 📖 🔬 ⚗️ 📐 🧮 🏆 💡 🎯 📊 📝 🔍 💻 🌟';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 24px;
+    opacity: 0.03;
+    line-height: 60px;
+    letter-spacing: 40px;
+    word-spacing: 40px;
+    white-space: pre-wrap;
     z-index: -1;
+    animation: float-logos 120s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes float-logos {
+    0% { transform: translateY(100vh) rotate(0deg); }
+    100% { transform: translateY(-100vh) rotate(360deg); }
   }
 }
 
 /* Custom gradient classes */
 .gradient-edtech-bg {
   background: linear-gradient(135deg, 
-    hsl(260, 25%, 18%) 0%, 
-    hsl(260, 30%, 20%) 25%, 
-    hsl(260, 25%, 18%) 50%, 
-    hsl(260, 28%, 19%) 75%, 
-    hsl(260, 25%, 18%) 100%
+    hsl(260, 30%, 8%) 0%, 
+    hsl(260, 25%, 12%) 25%, 
+    hsl(260, 30%, 8%) 50%, 
+    hsl(260, 28%, 10%) 75%, 
+    hsl(260, 30%, 8%) 100%
   );
 }
 
@@ -150,14 +174,14 @@ All colors MUST be HSL.
 
 /* EdTech themed patterns */
 .pattern-dots {
-  background-image: radial-gradient(circle, hsl(260, 40%, 25%, 0.4) 1px, transparent 1px);
+  background-image: radial-gradient(circle, hsl(260, 25%, 20%, 0.4) 1px, transparent 1px);
   background-size: 30px 30px;
 }
 
 .pattern-grid {
   background-image: 
-    linear-gradient(hsl(260, 30%, 25%, 0.2) 1px, transparent 1px),
-    linear-gradient(90deg, hsl(260, 30%, 25%, 0.2) 1px, transparent 1px);
+    linear-gradient(hsl(260, 20%, 18%, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(260, 20%, 18%, 0.2) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -192,11 +216,11 @@ All colors MUST be HSL.
 /* EdTech specific elements */
 .edtech-card {
   background: linear-gradient(135deg, 
-    hsl(260, 20%, 25%, 0.8) 0%, 
-    hsl(260, 25%, 22%, 0.9) 100%
+    hsl(260, 25%, 18%, 0.8) 0%, 
+    hsl(260, 20%, 15%, 0.9) 100%
   );
   backdrop-filter: blur(10px);
-  border: 1px solid hsl(260, 30%, 30%, 0.3);
+  border: 1px solid hsl(260, 20%, 25%, 0.3);
 }
 
 .edtech-highlight {
@@ -205,4 +229,30 @@ All colors MUST be HSL.
     hsl(48, 100%, 70%, 0.05) 100%
   );
   border-left: 3px solid hsl(48, 100%, 70%);
+}
+
+/* Carousel dots */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: hsl(260, 20%, 40%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background-color: hsl(48, 100%, 70%);
+  transform: scale(1.2);
+}
+
+.carousel-dot:hover {
+  background-color: hsl(48, 100%, 70%, 0.7);
 }

@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
@@ -22,11 +22,20 @@ import {
 
 const SubjectCarousel = () => {
   const [api, setApi] = React.useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (!api) {
       return;
     }
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1);
+    });
 
     // Auto-scroll every 4 seconds
     const timer = setInterval(() => {
@@ -102,6 +111,12 @@ const SubjectCarousel = () => {
     }
   ];
 
+  const goToSlide = (index: number) => {
+    if (api) {
+      api.scrollTo(index);
+    }
+  };
+
   return (
     <section id="subjects" className="py-20 bg-background">
       <div className="container mx-auto px-6">
@@ -154,7 +169,19 @@ const SubjectCarousel = () => {
           </CarouselContent>
         </Carousel>
         
-        <div className="flex justify-center mt-8">
+        {/* Navigation Dots */}
+        <div className="carousel-dots">
+          {Array.from({ length: Math.ceil(subjects.length / 3) }).map((_, index) => (
+            <button
+              key={index}
+              className={`carousel-dot ${Math.floor((current - 1) / 3) === index ? 'active' : ''}`}
+              onClick={() => goToSlide(index * 3)}
+              aria-label={`Go to slide group ${index + 1}`}
+            />
+          ))}
+        </div>
+        
+        <div className="flex justify-center mt-4">
           <div className="text-sm text-foreground/60 bg-card/50 px-4 py-2 rounded-full backdrop-blur-sm">
             Auto-scrolling • {subjects.length} subjects available
           </div>
