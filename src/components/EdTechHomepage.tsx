@@ -46,8 +46,7 @@ const EdTechHomepage = () => {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <GraduationCap className="h-8 w-8 text-primary" />
-              <span className="text-2xl font-bold text-gradient">EduMaster</span>
+              <span className="text-2xl font-bold text-gradient">gcsewala</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <a href="#subjects" className="text-foreground hover:text-primary transition-colors">Subjects</a>
@@ -176,8 +175,7 @@ const EdTechHomepage = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <GraduationCap className="h-6 w-6 text-primary" />
-                <span className="text-xl font-bold text-gradient">EduMaster</span>
+                <span className="text-xl font-bold text-gradient">gcsewala</span>
               </div>
               <p className="text-foreground/60">Empowering students worldwide with quality education and innovative learning experiences.</p>
             </div>
@@ -210,7 +208,7 @@ const EdTechHomepage = () => {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-border/50 text-center text-foreground/60">
-            &copy; 2024 EduMaster. All rights reserved.
+            &copy; 2024 gcsewala. All rights reserved.
           </div>
         </div>
       </footer>
