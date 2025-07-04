@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -22,16 +21,24 @@ import {
 interface SignInDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  initialMode?: 'signin' | 'signup';
 }
 
 type FormMode = 'signin' | 'signup' | 'reset';
 
-const SignInDialog = ({ open, onOpenChange }: SignInDialogProps) => {
-  const [mode, setMode] = useState<FormMode>('signin');
+const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDialogProps) => {
+  const [mode, setMode] = useState<FormMode>(initialMode);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+
+  // Update mode when initialMode changes
+  useEffect(() => {
+    if (open) {
+      setMode(initialMode);
+    }
+  }, [open, initialMode]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

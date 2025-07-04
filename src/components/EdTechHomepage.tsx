@@ -17,6 +17,7 @@ const EdTechHomepage = () => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isSignInOpen, setIsSignInOpen] = useState(false);
+  const [signInMode, setSignInMode] = useState<'signin' | 'signup'>('signin');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,6 +40,16 @@ const EdTechHomepage = () => {
 
   const handleTitleClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSignInClick = () => {
+    setSignInMode('signin');
+    setIsSignInOpen(true);
+  };
+
+  const handleEnrolClick = () => {
+    setSignInMode('signup');
+    setIsSignInOpen(true);
   };
 
   const testimonials = [
@@ -86,11 +97,11 @@ const EdTechHomepage = () => {
               <Button 
                 variant="outline" 
                 className="mr-2"
-                onClick={() => setIsSignInOpen(true)}
+                onClick={handleSignInClick}
               >
                 Sign In
               </Button>
-              <Button className="animate-pulse-glow">Sign Up</Button>
+              <Button className="animate-pulse-glow" onClick={handleEnrolClick}>Enrol Now!</Button>
             </div>
           </div>
         </div>
@@ -98,7 +109,8 @@ const EdTechHomepage = () => {
 
       <SignInDialog 
         open={isSignInOpen} 
-        onOpenChange={setIsSignInOpen} 
+        onOpenChange={setIsSignInOpen}
+        initialMode={signInMode}
       />
 
       {/* Hero Section */}
@@ -116,7 +128,7 @@ const EdTechHomepage = () => {
               Join thousands of students who've transformed their academic performance with our interactive courses and personalized learning paths.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="text-lg px-8 py-6 animate-pulse-glow">
+              <Button size="lg" className="text-lg px-8 py-6 animate-pulse-glow" onClick={handleEnrolClick}>
                 Start Learning Today
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -199,7 +211,7 @@ const EdTechHomepage = () => {
               Join thousands of successful students and start your journey to academic excellence today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg px-8 py-6 animate-pulse-glow">
+              <Button size="lg" className="text-lg px-8 py-6 animate-pulse-glow" onClick={handleEnrolClick}>
                 Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
