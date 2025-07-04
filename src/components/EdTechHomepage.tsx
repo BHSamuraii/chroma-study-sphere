@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import FlashcardCounter from './FlashcardCounter';
 import SubjectCarousel from './SubjectCarousel';
+import SignInDialog from './SignInDialog';
 import { 
   Users, 
   Star, 
@@ -16,6 +16,7 @@ import {
 const EdTechHomepage = () => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,12 +83,23 @@ const EdTechHomepage = () => {
               <a href="#subjects" className="text-foreground hover:text-primary transition-colors">Subjects</a>
               <a href="#faq" className="text-foreground hover:text-primary transition-colors">FAQ</a>
               <a href="#testimonials" className="text-foreground hover:text-primary transition-colors">Reviews</a>
-              <Button variant="outline" className="mr-2">Log In</Button>
+              <Button 
+                variant="outline" 
+                className="mr-2"
+                onClick={() => setIsSignInOpen(true)}
+              >
+                Sign In
+              </Button>
               <Button className="animate-pulse-glow">Sign Up</Button>
             </div>
           </div>
         </div>
       </nav>
+
+      <SignInDialog 
+        open={isSignInOpen} 
+        onOpenChange={setIsSignInOpen} 
+      />
 
       {/* Hero Section */}
       <section className="gradient-purple-yellow py-20 relative overflow-hidden">
