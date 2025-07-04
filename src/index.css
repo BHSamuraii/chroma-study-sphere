@@ -94,9 +94,17 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     position: relative;
     overflow-x: hidden;
+    background: linear-gradient(135deg, 
+      hsl(260, 35%, 8%) 0%, 
+      hsl(260, 30%, 12%) 25%, 
+      hsl(280, 25%, 10%) 50%, 
+      hsl(260, 30%, 8%) 75%, 
+      hsl(270, 35%, 12%) 100%
+    );
+    min-height: 100vh;
   }
 
   body::before {
@@ -109,8 +117,7 @@ All colors MUST be HSL.
     background: 
       radial-gradient(circle at 20% 20%, hsl(260, 35%, 12%) 0%, transparent 50%),
       radial-gradient(circle at 80% 80%, hsl(260, 30%, 10%) 0%, transparent 50%),
-      radial-gradient(circle at 40% 60%, hsl(260, 25%, 8%) 0%, transparent 50%),
-      linear-gradient(135deg, hsl(260, 30%, 8%) 0%, hsl(260, 25%, 12%) 50%, hsl(260, 30%, 8%) 100%);
+      radial-gradient(circle at 40% 60%, hsl(260, 25%, 8%) 0%, transparent 50%);
     z-index: -3;
   }
 
@@ -130,7 +137,7 @@ All colors MUST be HSL.
   }
 
   /* Studying logos background pattern */
-  body::before {
+  html::before {
     content: '📚 ✏️ 🎓 📖 🔬 ⚗️ 📐 🧮 🏆 💡 🎯 📊 📝 🔍 💻 🌟 📚 ✏️ 🎓 📖 🔬 ⚗️ 📐 🧮 🏆 💡 🎯 📊 📝 🔍 💻 🌟';
     position: fixed;
     top: 0;
@@ -154,14 +161,14 @@ All colors MUST be HSL.
   }
 }
 
-/* Custom gradient classes */
-.gradient-edtech-bg {
+/* Custom gradient classes for sections */
+.gradient-purple-yellow {
   background: linear-gradient(135deg, 
-    hsl(260, 30%, 8%) 0%, 
-    hsl(260, 25%, 12%) 25%, 
-    hsl(260, 30%, 8%) 50%, 
-    hsl(260, 28%, 10%) 75%, 
-    hsl(260, 30%, 8%) 100%
+    hsl(260, 40%, 15%) 0%, 
+    hsl(280, 35%, 18%) 25%, 
+    hsl(260, 30%, 12%) 50%, 
+    hsl(270, 35%, 15%) 75%, 
+    hsl(260, 40%, 18%) 100%
   );
 }
 
@@ -211,6 +218,25 @@ All colors MUST be HSL.
 
 .animate-gentle-pulse {
   animation: gentle-pulse 4s ease-in-out infinite;
+}
+
+/* Header scroll animation */
+@keyframes slideUp {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.header-hide {
+  animation: slideUp 0.3s ease-in-out forwards;
+}
+
+.header-show {
+  animation: slideDown 0.3s ease-in-out forwards;
 }
 
 /* EdTech specific elements */

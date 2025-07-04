@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,11 +10,36 @@ import {
   Star, 
   Play, 
   ArrowRight,
-  GraduationCap,
   Infinity
 } from 'lucide-react';
 
 const EdTechHomepage = () => {
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down and past 100px
+        setIsHeaderVisible(false);
+      } else {
+        // Scrolling up
+        setIsHeaderVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
+  const handleTitleClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const testimonials = [
     {
       name: "Sarah Johnson",
@@ -40,17 +65,22 @@ const EdTechHomepage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Navigation */}
-      <nav className="border-b border-border backdrop-blur-md bg-background/80 sticky top-0 z-50">
+      <nav className={`border-b border-border backdrop-blur-md bg-background/80 sticky top-0 z-50 transition-transform duration-300 ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-gradient">gcsewala</span>
+              <button 
+                onClick={handleTitleClick}
+                className="text-2xl font-bold text-gradient hover:opacity-80 transition-opacity cursor-pointer"
+              >
+                gcsewala
+              </button>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <a href="#subjects" className="text-foreground hover:text-primary transition-colors">Subjects</a>
-              <a href="#about" className="text-foreground hover:text-primary transition-colors">About</a>
+              <a href="#faq" className="text-foreground hover:text-primary transition-colors">FAQ</a>
               <a href="#testimonials" className="text-foreground hover:text-primary transition-colors">Reviews</a>
               <Button variant="outline" className="mr-2">Log In</Button>
               <Button className="animate-pulse-glow">Sign Up</Button>
@@ -101,11 +131,11 @@ const EdTechHomepage = () => {
         </div>
       </section>
 
-      {/* Flashcard Counter Section */}
-      <FlashcardCounter />
-
-      {/* Subject Carousel Section */}
+      {/* Subject Carousel Section - moved before Flashcard Counter */}
       <SubjectCarousel />
+
+      {/* Flashcard Counter Section - moved after Subject Carousel */}
+      <FlashcardCounter />
 
       {/* Testimonials Section */}
       <section id="testimonials" className="py-20 bg-card/20">
