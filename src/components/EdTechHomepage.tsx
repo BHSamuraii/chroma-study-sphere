@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -262,7 +263,7 @@ const EdTechHomepage = () => {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-border/50 text-center text-foreground/60">
-            &copy; 2024 gcsewala. All rights reserved.
+            &copy; 2025 gcsewala. All rights reserved.
           </div>
         </div>
       </footer>

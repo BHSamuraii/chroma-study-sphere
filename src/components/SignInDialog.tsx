@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import {
   Dialog,
@@ -81,9 +82,9 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader className="text-center space-y-2">
-          <div className="flex items-center justify-center mb-2">
+      <DialogContent className="sm:max-w-[420px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="text-center space-y-1 pb-4">
+          <div className="flex items-center justify-center mb-3">
             {mode === 'reset' && (
               <Button
                 variant="ghost"
@@ -94,11 +95,11 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
                 <ArrowLeft className="h-4 w-4" />
               </Button>
             )}
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <User className="h-6 w-6 text-primary" />
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <User className="h-5 w-5 text-primary" />
             </div>
           </div>
-          <DialogTitle className="text-2xl font-bold text-gradient">
+          <DialogTitle className="text-xl font-bold text-gradient">
             {getTitle()}
           </DialogTitle>
           <p className="text-muted-foreground text-sm">
@@ -106,11 +107,11 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
           </p>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {mode !== 'reset' && (
             <Button
               variant="outline"
-              className="w-full h-11"
+              className="w-full h-10"
               onClick={handleGoogleSignIn}
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -148,7 +149,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3">
             {mode === 'signup' && (
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
@@ -160,7 +161,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
                     placeholder="Enter your full name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 h-10"
                     required
                   />
                 </div>
@@ -177,7 +178,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 h-10"
                   required
                 />
               </div>
@@ -194,7 +195,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10"
+                    className="pl-10 pr-10 h-10"
                     required
                   />
                   <button
@@ -212,7 +213,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
               </div>
             )}
 
-            <Button type="submit" className="w-full h-11">
+            <Button type="submit" className="w-full h-10">
               {mode === 'signin' && 'Sign In'}
               {mode === 'signup' && 'Create Account'}
               {mode === 'reset' && 'Send Reset Email'}
