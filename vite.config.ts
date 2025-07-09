@@ -39,8 +39,8 @@ export default defineConfig(({ mode }) => ({
     target: 'es2015',
     // Generate source maps for debugging
     sourcemap: false,
-    // Optimize for production
-    minify: 'terser'
+    // Optimize for production - only use terser in production mode
+    minify: mode === 'production' ? 'terser' : false
   },
   // Configure base URL for WordPress deployment
   base: mode === 'production' ? '/wp-content/plugins/chroma-ui/assets/' : '/',
