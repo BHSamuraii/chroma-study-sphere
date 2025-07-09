@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -5,12 +6,15 @@ import { Badge } from '@/components/ui/badge';
 import FlashcardCounter from './FlashcardCounter';
 import SubjectCarousel from './SubjectCarousel';
 import SignInDialog from './SignInDialog';
+import { useAuth } from '@/hooks/useAuth';
 import { 
   Users, 
   Star, 
   Play, 
   ArrowRight,
-  Infinity
+  Infinity,
+  LogOut,
+  User
 } from 'lucide-react';
 
 const EdTechHomepage = () => {
@@ -18,6 +22,8 @@ const EdTechHomepage = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [signInDialogOpen, setSignInDialogOpen] = useState(false);
   const [signInMode, setSignInMode] = useState<'signin' | 'signup'>('signin');
+
+  const { user, signOut, loading } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,8 +54,17 @@ const EdTechHomepage = () => {
   };
 
   const handleEnrolClick = () => {
+    if (user) {
+      // User is already logged in, show a welcome message or navigate to dashboard
+      console.log('User is already enrolled:', user.email);
+      return;
+    }
     setSignInMode('signup');
     setSignInDialogOpen(true);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
   };
 
   const testimonials = [
@@ -94,14 +109,46 @@ const EdTechHomepage = () => {
               <a href="#subjects" className="text-foreground hover:text-primary transition-colors">Subjects</a>
               <a href="#faq" className="text-foreground hover:text-primary transition-colors">FAQ</a>
               <a href="#testimonials" className="text-foreground hover:text-primary transition-colors">Reviews</a>
-              <Button 
-                variant="outline" 
-                className="mr-2"
-                onClick={handleSignInClick}
-              >
-                Sign In
-              </Button>
-              <Button className="animate-pulse-glow" onClick={handleEnrolClick}>Enrol Now!</Button>
+              
+              {user ? (
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="text-sm text-foreground">
+                      {user.user_metadata?.full_name || user.email}
+                    </span>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleSignOut}
+                    disabled={loading}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Button 
+                    variant="outline" 
+                    className="mr-2"
+                    onClick={handleSignInClick}
+                    disabled={loading}
+                  >
+                    Sign In
+                  </Button>
+                  <Button 
+                    className="animate-pulse-glow" 
+                    onClick={handleEnrolClick}
+                    disabled={loading}
+                  >
+                    Enrol Now!
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -112,18 +159,28 @@ const EdTechHomepage = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-background/20 to-transparent"></div>
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-6 animate-float">🚀 New AI-Powered Learning Experience</Badge>
+            <Badge className="mb-6 animate-float">
+              {user ? `🎉 Welcome back, ${user.user_metadata?.full_name || user.email?.split('@')[0]}!` : '🚀 New AI-Powered Learning Experience'}
+            </Badge>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gradient leading-tight">
               Master Any Subject
               <br />
               <span className="text-primary">With Expert Guidance</span>
             </h1>
             <p className="text-xl md:text-2xl text-foreground/80 mb-8 max-w-2xl mx-auto">
-              Join thousands of students who've transformed their academic performance with our interactive courses and personalized learning paths.
+              {user 
+                ? "Continue your learning journey with our interactive courses and personalized learning paths."
+                : "Join thousands of students who've transformed their academic performance with our interactive courses and personalized learning paths."
+              }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="text-lg px-8 py-6 animate-pulse-glow" onClick={handleEnrolClick}>
-                Start Learning Today
+              <Button 
+                size="lg" 
+                className="text-lg px-8 py-6 animate-pulse-glow" 
+                onClick={handleEnrolClick}
+                disabled={loading}
+              >
+                {user ? 'Continue Learning' : 'Start Learning Today'}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8 py-6">
@@ -199,14 +256,22 @@ const EdTechHomepage = () => {
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">
-              Ready to Transform Your Learning?
+              {user ? 'Ready to Continue Your Journey?' : 'Ready to Transform Your Learning?'}
             </h2>
             <p className="text-xl text-foreground/80 mb-8 max-w-2xl mx-auto">
-              Join thousands of successful students and start your journey to academic excellence today.
+              {user 
+                ? "Access your personalized dashboard and continue building your skills."
+                : "Join thousands of successful students and start your journey to academic excellence today."
+              }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg px-8 py-6 animate-pulse-glow" onClick={handleEnrolClick}>
-                Start Free Trial
+              <Button 
+                size="lg" 
+                className="text-lg px-8 py-6 animate-pulse-glow" 
+                onClick={handleEnrolClick}
+                disabled={loading}
+              >
+                {user ? 'Go to Dashboard' : 'Start Free Trial'}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8 py-6">
