@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import FlashcardCounter from './FlashcardCounter';
 import SubjectCarousel from './SubjectCarousel';
+import SignInDialog from './SignInDialog';
 import { 
   Users, 
   Star, 
@@ -16,10 +16,8 @@ import {
 const EdTechHomepage = () => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const navigate = useNavigate();
-
-  // Detect if we're in WordPress context
-  const isWordPress = window.location.pathname.includes('/home');
+  const [signInDialogOpen, setSignInDialogOpen] = useState(false);
+  const [signInMode, setSignInMode] = useState<'signin' | 'signup'>('signin');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,21 +43,13 @@ const EdTechHomepage = () => {
   };
 
   const handleSignInClick = () => {
-    if (isWordPress) {
-      // In WordPress, you might want to redirect to a different login page
-      window.location.href = '/wp-login.php';
-    } else {
-      navigate('/login');
-    }
+    setSignInMode('signin');
+    setSignInDialogOpen(true);
   };
 
   const handleEnrolClick = () => {
-    if (isWordPress) {
-      // In WordPress, you might want to redirect to a different signup page
-      window.location.href = '/wp-login.php?action=register';
-    } else {
-      navigate('/signup');
-    }
+    setSignInMode('signup');
+    setSignInDialogOpen(true);
   };
 
   const testimonials = [
@@ -270,6 +260,13 @@ const EdTechHomepage = () => {
           </div>
         </div>
       </footer>
+
+      {/* Sign In Dialog */}
+      <SignInDialog 
+        open={signInDialogOpen}
+        onOpenChange={setSignInDialogOpen}
+        initialMode={signInMode}
+      />
     </div>
   );
 };
