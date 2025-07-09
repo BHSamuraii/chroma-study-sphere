@@ -18,6 +18,9 @@ const EdTechHomepage = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
 
+  // Detect if we're in WordPress context
+  const isWordPress = window.location.pathname.includes('/home');
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -42,11 +45,21 @@ const EdTechHomepage = () => {
   };
 
   const handleSignInClick = () => {
-    navigate('/login');
+    if (isWordPress) {
+      // In WordPress, you might want to redirect to a different login page
+      window.location.href = '/wp-login.php';
+    } else {
+      navigate('/login');
+    }
   };
 
   const handleEnrolClick = () => {
-    navigate('/signup');
+    if (isWordPress) {
+      // In WordPress, you might want to redirect to a different signup page
+      window.location.href = '/wp-login.php?action=register';
+    } else {
+      navigate('/signup');
+    }
   };
 
   const testimonials = [

@@ -11,12 +11,16 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Detect if we're running in WordPress context
+const isWordPress = window.location.pathname.includes('/home');
+const basename = isWordPress ? '/home' : '';
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
