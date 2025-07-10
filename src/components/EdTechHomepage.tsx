@@ -138,14 +138,14 @@ const EdTechHomepage = () => {
                     onClick={handleSignInClick}
                     disabled={loading}
                   >
-                    Sign In
+                    Log In
                   </Button>
                   <Button 
                     className="animate-pulse-glow" 
                     onClick={handleEnrolClick}
                     disabled={loading}
                   >
-                    Enrol Now!
+                    Get Started
                   </Button>
                 </>
               )}
@@ -180,7 +180,7 @@ const EdTechHomepage = () => {
                 onClick={handleEnrolClick}
                 disabled={loading}
               >
-                {user ? 'Continue Learning' : 'Start Learning Today'}
+                {user ? 'Continue Learning' : 'Get Started'}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8 py-6">

@@ -114,7 +114,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
 
   const getSubtitle = () => {
     switch (mode) {
-      case 'signin': return 'Sign in to your account to continue learning';
+      case 'signin': return 'Log in to your account to continue learning';
       case 'signup': return 'Join thousands of students improving their grades';
       case 'reset': return 'Enter your email to receive reset instructions';
     }
@@ -180,7 +180,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
                   />
                 </svg>
               )}
-              Continue with Google
+              Sign Up with Google
             </Button>
           )}
 
@@ -269,7 +269,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
               {isLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
-              {mode === 'signin' && 'Sign In'}
+              {mode === 'signin' && 'Log In'}
               {mode === 'signup' && 'Create Account'}
               {mode === 'reset' && 'Send Reset Email'}
             </Button>
@@ -309,7 +309,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
                   className="text-primary hover:underline font-medium disabled:opacity-50"
                   disabled={isLoading}
                 >
-                  Sign in
+                  Log in
                 </button>
               </div>
             )}
@@ -323,7 +323,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
                   className="text-primary hover:underline font-medium disabled:opacity-50"
                   disabled={isLoading}
                 >
-                  Sign in
+                  Log in
                 </button>
               </div>
             )}

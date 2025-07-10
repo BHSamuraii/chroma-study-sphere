@@ -4,6 +4,43 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+// Cookie utility functions
+const setCookie = (name: string, value: string, days: number = 7) => {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+  const domain = window.location.hostname.includes('gcseanki.co.uk') ? '.gcseanki.co.uk' : '';
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;domain=${domain};SameSite=Lax`;
+};
+
+const deleteCookie = (name: string) => {
+  const domain = window.location.hostname.includes('gcseanki.co.uk') ? '.gcseanki.co.uk' : '';
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;domain=${domain};SameSite=Lax`;
+};
+
+// Function to sync token with WordPress via the edge function
+const syncTokenWithWordPress = async (session: Session | null) => {
+  try {
+    const response = await fetch('https://xcibkpxhyivgfvrojrbw.supabase.co/functions/v1/wordpress-auth-bridge', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': session ? `Bearer ${session.access_token}` : '',
+      },
+      body: JSON.stringify({
+        action: session ? 'set_token' : 'clear_token',
+        token: session?.access_token || null,
+        user: session?.user || null,
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn('Failed to sync token with WordPress:', response.statusText);
+    }
+  } catch (error) {
+    console.warn('Error syncing token with WordPress:', error);
+  }
+};
+
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -13,11 +50,27 @@ export const useAuth = () => {
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+
+        // Store token in cookie for WordPress access
+        if (session?.access_token) {
+          setCookie('supabase_token', session.access_token, 7);
+          setCookie('supabase_user', JSON.stringify({
+            id: session.user.id,
+            email: session.user.email,
+            name: session.user.user_metadata?.full_name || session.user.email
+          }), 7);
+        } else {
+          deleteCookie('supabase_token');
+          deleteCookie('supabase_user');
+        }
+
+        // Sync with WordPress via edge function
+        await syncTokenWithWordPress(session);
       }
     );
 
@@ -27,6 +80,16 @@ export const useAuth = () => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+
+      // Store token in cookie for WordPress access
+      if (session?.access_token) {
+        setCookie('supabase_token', session.access_token, 7);
+        setCookie('supabase_user', JSON.stringify({
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.user_metadata?.full_name || session.user.email
+        }), 7);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -133,6 +196,10 @@ export const useAuth = () => {
         });
         return { error };
       }
+
+      // Clear cookies
+      deleteCookie('supabase_token');
+      deleteCookie('supabase_user');
 
       toast({
         title: "Signed Out",
