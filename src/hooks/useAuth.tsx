@@ -41,6 +41,11 @@ const syncTokenWithWordPress = async (session: Session | null) => {
   }
 };
 
+// Function to redirect to dashboard
+const redirectToDashboard = () => {
+  window.location.href = 'https://gcseanki.co.uk/dashboard';
+};
+
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -71,6 +76,14 @@ export const useAuth = () => {
 
         // Sync with WordPress via edge function
         await syncTokenWithWordPress(session);
+
+        // Redirect to dashboard after successful login
+        if (event === 'SIGNED_IN' && session) {
+          console.log('User signed in, redirecting to dashboard...');
+          setTimeout(() => {
+            redirectToDashboard();
+          }, 1000); // Small delay to allow state updates and toast messages
+        }
       }
     );
 
@@ -98,7 +111,7 @@ export const useAuth = () => {
   const signUp = async (email: string, password: string, name?: string) => {
     try {
       setLoading(true);
-      const redirectUrl = `${window.location.origin}/`;
+      const redirectUrl = 'https://gcseanki.co.uk/dashboard';
       
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -223,7 +236,7 @@ export const useAuth = () => {
   const resetPassword = async (email: string) => {
     try {
       setLoading(true);
-      const redirectUrl = `${window.location.origin}/`;
+      const redirectUrl = 'https://gcseanki.co.uk/dashboard';
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl,
@@ -261,7 +274,7 @@ export const useAuth = () => {
   const signInWithGoogle = async () => {
     try {
       setLoading(true);
-      const redirectUrl = `${window.location.origin}/`;
+      const redirectUrl = 'https://gcseanki.co.uk/dashboard';
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
