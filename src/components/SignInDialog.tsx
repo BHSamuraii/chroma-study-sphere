@@ -180,7 +180,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
                   />
                 </svg>
               )}
-              Sign Up with Google
+              Login with Google
             </Button>
           )}
 

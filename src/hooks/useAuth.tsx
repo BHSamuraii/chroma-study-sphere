@@ -41,9 +41,9 @@ const syncTokenWithWordPress = async (session: Session | null) => {
   }
 };
 
-// Function to redirect to dashboard
+// Function to redirect to test dashboard
 const redirectToDashboard = () => {
-  window.location.href = 'https://gcseanki.co.uk/dashboard';
+  window.location.href = 'https://gcseanki.co.uk/test-dashboard';
 };
 
 export const useAuth = () => {
@@ -77,9 +77,9 @@ export const useAuth = () => {
         // Sync with WordPress via edge function
         await syncTokenWithWordPress(session);
 
-        // Redirect to dashboard after successful login
+        // Redirect to test dashboard after successful login
         if (event === 'SIGNED_IN' && session) {
-          console.log('User signed in, redirecting to dashboard...');
+          console.log('User signed in, redirecting to test dashboard...');
           setTimeout(() => {
             redirectToDashboard();
           }, 1000); // Small delay to allow state updates and toast messages
@@ -111,7 +111,7 @@ export const useAuth = () => {
   const signUp = async (email: string, password: string, name?: string) => {
     try {
       setLoading(true);
-      const redirectUrl = 'https://gcseanki.co.uk/dashboard';
+      const redirectUrl = 'https://gcseanki.co.uk/test-dashboard';
       
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -236,7 +236,7 @@ export const useAuth = () => {
   const resetPassword = async (email: string) => {
     try {
       setLoading(true);
-      const redirectUrl = 'https://gcseanki.co.uk/dashboard';
+      const redirectUrl = 'https://gcseanki.co.uk/test-dashboard';
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl,
@@ -274,7 +274,7 @@ export const useAuth = () => {
   const signInWithGoogle = async () => {
     try {
       setLoading(true);
-      const redirectUrl = 'https://gcseanki.co.uk/dashboard';
+      const redirectUrl = 'https://gcseanki.co.uk/test-dashboard';
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
