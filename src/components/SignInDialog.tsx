@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import {
   Dialog,
@@ -120,6 +119,10 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
     }
   };
 
+  const getGoogleButtonText = () => {
+    return mode === 'signup' ? 'Sign up with Google' : 'Login with Google';
+  };
+
   const isLoading = loading || isSubmitting;
 
   return (
@@ -180,7 +183,7 @@ const SignInDialog = ({ open, onOpenChange, initialMode = 'signin' }: SignInDial
                   />
                 </svg>
               )}
-              Login with Google
+              {getGoogleButtonText()}
             </Button>
           )}
 

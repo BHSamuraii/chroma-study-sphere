@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -41,9 +40,16 @@ const syncTokenWithWordPress = async (session: Session | null) => {
   }
 };
 
-// Function to redirect to test dashboard
+// Function to redirect to test dashboard and clean URL
 const redirectToDashboard = () => {
-  window.location.href = 'https://gcseanki.co.uk/test-dashboard';
+  // Clean the URL by removing any hash fragments (which contain tokens)
+  if (window.location.hash) {
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+  
+  setTimeout(() => {
+    window.location.href = 'https://gcseanki.co.uk/test-dashboard';
+  }, 100);
 };
 
 export const useAuth = () => {
@@ -53,6 +59,23 @@ export const useAuth = () => {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Handle OAuth callback immediately if present
+    const handleOAuthCallback = async () => {
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      if (hashParams.get('access_token')) {
+        console.log('OAuth callback detected, processing...');
+        // Let Supabase handle the session from the hash
+        const { data, error } = await supabase.auth.getSession();
+        if (data.session && !error) {
+          console.log('OAuth session established successfully');
+          // Clean URL immediately
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+      }
+    };
+
+    handleOAuthCallback();
+
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -80,30 +103,40 @@ export const useAuth = () => {
         // Redirect to test dashboard after successful login
         if (event === 'SIGNED_IN' && session) {
           console.log('User signed in, redirecting to test dashboard...');
-          setTimeout(() => {
-            redirectToDashboard();
-          }, 1000); // Small delay to allow state updates and toast messages
+          redirectToDashboard();
         }
       }
     );
 
     // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('Initial session check:', session?.user?.email);
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
+    const initializeAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) {
+          console.error('Error getting session:', error);
+        } else {
+          console.log('Initial session check:', session?.user?.email);
+          setSession(session);
+          setUser(session?.user ?? null);
 
-      // Store token in cookie for WordPress access
-      if (session?.access_token) {
-        setCookie('supabase_token', session.access_token, 7);
-        setCookie('supabase_user', JSON.stringify({
-          id: session.user.id,
-          email: session.user.email,
-          name: session.user.user_metadata?.full_name || session.user.email
-        }), 7);
+          // Store token in cookie for WordPress access
+          if (session?.access_token) {
+            setCookie('supabase_token', session.access_token, 7);
+            setCookie('supabase_user', JSON.stringify({
+              id: session.user.id,
+              email: session.user.email,
+              name: session.user.user_metadata?.full_name || session.user.email
+            }), 7);
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+      } finally {
+        setLoading(false);
       }
-    });
+    };
+
+    initializeAuth();
 
     return () => subscription.unsubscribe();
   }, []);
