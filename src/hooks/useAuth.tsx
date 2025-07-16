@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -38,20 +39,23 @@ export const useAuth = () => {
   useEffect(() => {
     // Immediately sanitize URL on load
     sanitizeUrl();
-    
+
     // Handle OAuth callback with security measures
     const initializeSecureAuth = async () => {
       // Handle OAuth callback securely
       const oauthSession = await handleOAuthSecurity(supabase);
-      
+
       // Set up auth state listener
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
         async (event, session) => {
           console.log('Auth state changed:', event, session?.user?.email);
-          
-          // Sanitize URL on any auth state change
+
+          // Sanitize URL and explicitly remove hash if present
           sanitizeUrl();
-          
+          if (window.location.hash) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
+
           setSession(session);
           setUser(session?.user ?? null);
           setLoading(false);
@@ -120,7 +124,7 @@ export const useAuth = () => {
     try {
       setLoading(true);
       const redirectUrl = 'https://gcseanki.co.uk/test-dashboard';
-      
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -207,7 +211,7 @@ export const useAuth = () => {
     try {
       setLoading(true);
       const { error } = await supabase.auth.signOut();
-      
+
       if (error) {
         console.error('Sign out error:', error);
         toast({
@@ -245,7 +249,7 @@ export const useAuth = () => {
     try {
       setLoading(true);
       const redirectUrl = 'https://gcseanki.co.uk/test-dashboard';
-      
+
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl,
       });
@@ -283,7 +287,7 @@ export const useAuth = () => {
     try {
       setLoading(true);
       const redirectUrl = 'https://gcseanki.co.uk/test-dashboard';
-      
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
