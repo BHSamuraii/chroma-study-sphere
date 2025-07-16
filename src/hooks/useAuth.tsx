@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -288,9 +287,7 @@ export const useAuth = () => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: redirectUrl,
-          // Enable PKCE for enhanced security
-          flowType: 'pkce'
+          redirectTo: redirectUrl
         }
       });
 
