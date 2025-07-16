@@ -1,22 +1,12 @@
+
 import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { sanitizeUrl, setSecureCookie, deleteSecureCookie } from '@/utils/authSecurity';
+import { createSecureRedirect, handleOAuthSecurity } from '@/utils/authRedirect';
 
-// Cookie utility functions
-const setCookie = (name: string, value: string, days: number = 7) => {
-  const expires = new Date();
-  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-  const domain = window.location.hostname.includes('gcseanki.co.uk') ? '.gcseanki.co.uk' : '';
-  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;domain=${domain};SameSite=Lax`;
-};
-
-const deleteCookie = (name: string) => {
-  const domain = window.location.hostname.includes('gcseanki.co.uk') ? '.gcseanki.co.uk' : '';
-  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;domain=${domain};SameSite=Lax`;
-};
-
-// Function to sync token with WordPress via the edge function
+// WordPress sync function
 const syncTokenWithWordPress = async (session: Session | null) => {
   try {
     const response = await fetch('https://xcibkpxhyivgfvrojrbw.supabase.co/functions/v1/wordpress-auth-bridge', {
@@ -40,18 +30,6 @@ const syncTokenWithWordPress = async (session: Session | null) => {
   }
 };
 
-// Function to redirect to test dashboard and clean URL
-const redirectToDashboard = () => {
-  // Clean the URL by removing any hash fragments (which contain tokens)
-  if (window.location.hash) {
-    window.history.replaceState(null, '', window.location.pathname + window.location.search);
-  }
-  
-  setTimeout(() => {
-    window.location.href = 'https://gcseanki.co.uk/test-dashboard';
-  }, 100);
-};
-
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -59,57 +37,51 @@ export const useAuth = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Handle OAuth callback immediately if present
-    const handleOAuthCallback = async () => {
-      const hashParams = new URLSearchParams(window.location.hash.slice(1));
-      if (hashParams.get('access_token')) {
-        console.log('OAuth callback detected, processing...');
-        // Let Supabase handle the session from the hash
-        const { data, error } = await supabase.auth.getSession();
-        if (data.session && !error) {
-          console.log('OAuth session established successfully');
-          // Clean URL immediately
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    // Immediately sanitize URL on load
+    sanitizeUrl();
+    
+    // Handle OAuth callback with security measures
+    const initializeSecureAuth = async () => {
+      // Handle OAuth callback securely
+      const oauthSession = await handleOAuthSecurity(supabase);
+      
+      // Set up auth state listener
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          console.log('Auth state changed:', event, session?.user?.email);
+          
+          // Sanitize URL on any auth state change
+          sanitizeUrl();
+          
+          setSession(session);
+          setUser(session?.user ?? null);
+          setLoading(false);
+
+          // Secure token storage
+          if (session?.access_token) {
+            setSecureCookie('supabase_token', session.access_token, 7);
+            setSecureCookie('supabase_user', JSON.stringify({
+              id: session.user.id,
+              email: session.user.email,
+              name: session.user.user_metadata?.full_name || session.user.email
+            }), 7);
+          } else {
+            deleteSecureCookie('supabase_token');
+            deleteSecureCookie('supabase_user');
+          }
+
+          // Sync with WordPress
+          await syncTokenWithWordPress(session);
+
+          // Secure redirect after successful login
+          if (event === 'SIGNED_IN' && session) {
+            console.log('User signed in, securing redirect...');
+            createSecureRedirect();
+          }
         }
-      }
-    };
+      );
 
-    handleOAuthCallback();
-
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.email);
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-
-        // Store token in cookie for WordPress access
-        if (session?.access_token) {
-          setCookie('supabase_token', session.access_token, 7);
-          setCookie('supabase_user', JSON.stringify({
-            id: session.user.id,
-            email: session.user.email,
-            name: session.user.user_metadata?.full_name || session.user.email
-          }), 7);
-        } else {
-          deleteCookie('supabase_token');
-          deleteCookie('supabase_user');
-        }
-
-        // Sync with WordPress via edge function
-        await syncTokenWithWordPress(session);
-
-        // Redirect to test dashboard after successful login
-        if (event === 'SIGNED_IN' && session) {
-          console.log('User signed in, redirecting to test dashboard...');
-          redirectToDashboard();
-        }
-      }
-    );
-
-    // THEN check for existing session
-    const initializeAuth = async () => {
+      // Check for existing session
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
@@ -119,10 +91,9 @@ export const useAuth = () => {
           setSession(session);
           setUser(session?.user ?? null);
 
-          // Store token in cookie for WordPress access
           if (session?.access_token) {
-            setCookie('supabase_token', session.access_token, 7);
-            setCookie('supabase_user', JSON.stringify({
+            setSecureCookie('supabase_token', session.access_token, 7);
+            setSecureCookie('supabase_user', JSON.stringify({
               id: session.user.id,
               email: session.user.email,
               name: session.user.user_metadata?.full_name || session.user.email
@@ -134,11 +105,16 @@ export const useAuth = () => {
       } finally {
         setLoading(false);
       }
+
+      return subscription;
     };
 
-    initializeAuth();
+    let subscription: any;
+    initializeSecureAuth().then((sub) => {
+      subscription = sub;
+    });
 
-    return () => subscription.unsubscribe();
+    return () => subscription?.unsubscribe();
   }, []);
 
   const signUp = async (email: string, password: string, name?: string) => {
@@ -243,9 +219,9 @@ export const useAuth = () => {
         return { error };
       }
 
-      // Clear cookies
-      deleteCookie('supabase_token');
-      deleteCookie('supabase_user');
+      // Clear secure cookies
+      deleteSecureCookie('supabase_token');
+      deleteSecureCookie('supabase_user');
 
       toast({
         title: "Signed Out",
@@ -313,6 +289,8 @@ export const useAuth = () => {
         provider: 'google',
         options: {
           redirectTo: redirectUrl,
+          // Enable PKCE for enhanced security
+          flowType: 'pkce'
         }
       });
 
