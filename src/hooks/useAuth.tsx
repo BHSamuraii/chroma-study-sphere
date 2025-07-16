@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import { User, Session, SupabaseClient } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { sanitizeUrl, setSecureCookie, deleteSecureCookie } from '@/utils/authSecurity';
@@ -40,8 +39,13 @@ export const useAuth = () => {
     // Immediately sanitize URL on load
     sanitizeUrl();
 
-    // Handle OAuth callback with security measures
+    // Handle OAuth callback with security measures and immediate cleanup
     const initializeSecureAuth = async () => {
+      // Clean URL before processing OAuth callback
+      if (window.location.hash) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
       // Handle OAuth callback securely
       const oauthSession = await handleOAuthSecurity(supabase);
 
@@ -50,8 +54,7 @@ export const useAuth = () => {
         async (event, session) => {
           console.log('Auth state changed:', event, session?.user?.email);
 
-          // Sanitize URL and explicitly remove hash if present
-          sanitizeUrl();
+          // Additional cleanup on state change
           if (window.location.hash) {
             window.history.replaceState({}, document.title, window.location.pathname);
           }
