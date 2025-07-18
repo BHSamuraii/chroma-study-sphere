@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -14,6 +15,17 @@ const setCookie = (name: string, value: string, days: number = 7) => {
 const deleteCookie = (name: string) => {
   const domain = window.location.hostname.includes('gcseanki.co.uk') ? '.gcseanki.co.uk' : '';
   document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;domain=${domain};SameSite=Lax`;
+};
+
+const getCookie = (name: string): string | null => {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
 };
 
 // Function to sync token with WordPress via the edge function
@@ -50,6 +62,17 @@ const redirectToDashboard = () => {
   setTimeout(() => {
     window.location.href = 'https://gcseanki.co.uk/test-dashboard';
   }, 100);
+};
+
+// Check if this is a first-time login by checking if user has visited before
+const isFirstTimeLogin = (userId: string): boolean => {
+  const hasVisitedBefore = getCookie(`user_visited_${userId}`);
+  return !hasVisitedBefore;
+};
+
+// Mark user as having visited before
+const markUserAsVisited = (userId: string) => {
+  setCookie(`user_visited_${userId}`, 'true', 30); // 30 days
 };
 
 export const useAuth = () => {
@@ -100,10 +123,18 @@ export const useAuth = () => {
         // Sync with WordPress via edge function
         await syncTokenWithWordPress(session);
 
-        // Redirect to test dashboard after successful login
+        // Handle first-time login redirect
         if (event === 'SIGNED_IN' && session) {
-          console.log('User signed in, redirecting to test dashboard...');
-          redirectToDashboard();
+          console.log('User signed in, checking if first time...');
+          
+          // Check if this is a first-time login
+          if (isFirstTimeLogin(session.user.id)) {
+            console.log('First time login detected, redirecting to dashboard...');
+            markUserAsVisited(session.user.id);
+            redirectToDashboard();
+          } else {
+            console.log('Returning user, staying on current page');
+          }
         }
       }
     );
@@ -247,6 +278,11 @@ export const useAuth = () => {
       deleteCookie('supabase_token');
       deleteCookie('supabase_user');
 
+      // Clear visit tracking cookies
+      if (user) {
+        deleteCookie(`user_visited_${user.id}`);
+      }
+
       toast({
         title: "Signed Out",
         description: "You have been signed out successfully.",
@@ -313,6 +349,10 @@ export const useAuth = () => {
         provider: 'google',
         options: {
           redirectTo: redirectUrl,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          }
         }
       });
 

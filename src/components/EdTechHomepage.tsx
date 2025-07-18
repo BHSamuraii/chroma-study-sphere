@@ -14,7 +14,8 @@ import {
   ArrowRight,
   Infinity,
   LogOut,
-  User
+  User,
+  LayoutDashboard
 } from 'lucide-react';
 
 const EdTechHomepage = () => {
@@ -55,12 +56,16 @@ const EdTechHomepage = () => {
 
   const handleEnrolClick = () => {
     if (user) {
-      // User is already logged in, show a welcome message or navigate to dashboard
-      console.log('User is already enrolled:', user.email);
+      // User is already logged in, navigate to dashboard
+      window.location.href = 'https://gcseanki.co.uk/test-dashboard';
       return;
     }
     setSignInMode('signup');
     setSignInDialogOpen(true);
+  };
+
+  const handleDashboardClick = () => {
+    window.location.href = 'https://gcseanki.co.uk/test-dashboard';
   };
 
   const handleSignOut = async () => {
@@ -112,6 +117,15 @@ const EdTechHomepage = () => {
               
               {user ? (
                 <div className="flex items-center space-x-4">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={handleDashboardClick}
+                    className="text-primary hover:text-primary/80"
+                  >
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    Dashboard
+                  </Button>
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                       <User className="h-4 w-4 text-primary" />
@@ -180,7 +194,7 @@ const EdTechHomepage = () => {
                 onClick={handleEnrolClick}
                 disabled={loading}
               >
-                {user ? 'Continue Learning' : 'Get Started'}
+                {user ? 'Go to Dashboard' : 'Get Started'}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8 py-6">
