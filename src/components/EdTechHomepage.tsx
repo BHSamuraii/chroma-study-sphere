@@ -111,21 +111,22 @@ const EdTechHomepage = () => {
               </button>
             </div>
             <div className="hidden md:flex items-center space-x-8">
+              {user && (
+                <Button 
+                  variant="ghost" 
+                  onClick={handleDashboardClick}
+                  className="text-primary hover:text-primary/80"
+                >
+                  <LayoutDashboard className="h-4 w-4 mr-2" />
+                  Dashboard
+                </Button>
+              )}
               <a href="#subjects" className="text-foreground hover:text-primary transition-colors">Subjects</a>
               <a href="#faq" className="text-foreground hover:text-primary transition-colors">FAQ</a>
               <a href="#testimonials" className="text-foreground hover:text-primary transition-colors">Reviews</a>
               
               {user ? (
                 <div className="flex items-center space-x-4">
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={handleDashboardClick}
-                    className="text-primary hover:text-primary/80"
-                  >
-                    <LayoutDashboard className="h-4 w-4 mr-2" />
-                    Dashboard
-                  </Button>
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                       <User className="h-4 w-4 text-primary" />

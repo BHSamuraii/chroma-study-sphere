@@ -351,7 +351,6 @@ export const useAuth = () => {
           redirectTo: redirectUrl,
           queryParams: {
             access_type: 'offline',
-            prompt: 'consent',
           }
         }
       });
