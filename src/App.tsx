@@ -11,16 +11,31 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Determine the base URL for routing based on environment
+const getBasename = () => {
+  if (typeof window !== 'undefined') {
+    const pathname = window.location.pathname;
+    if (pathname.includes('/home')) {
+      return '/home';
+    } else if (pathname.includes('/dashboard')) {
+      return '/dashboard';
+    }
+  }
+  return '/';
+};
+
 function App() {
+  const basename = getBasename();
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
+          <BrowserRouter basename={basename}>
             <Routes>
-              <Route path="/" element={<Index />} />
+              <Route path="/" element={basename.includes('/dashboard') ? <Dashboard /> : <Index />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

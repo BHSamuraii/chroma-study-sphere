@@ -52,7 +52,16 @@ const syncTokenWithWordPress = async (session: Session | null) => {
   }
 };
 
-// Function to redirect to local dashboard and clean URL
+// Function to get the correct dashboard URL based on environment
+const getDashboardUrl = () => {
+  const hostname = window.location.hostname;
+  if (hostname.includes('gcseanki.co.uk')) {
+    return 'https://gcseanki.co.uk/dashboard';
+  }
+  return '/dashboard';
+};
+
+// Function to redirect to dashboard and clean URL
 const redirectToDashboard = () => {
   // Clean the URL by removing any hash fragments (which contain tokens)
   if (window.location.hash) {
@@ -60,7 +69,7 @@ const redirectToDashboard = () => {
   }
   
   setTimeout(() => {
-    window.location.href = '/dashboard';
+    window.location.href = getDashboardUrl();
   }, 100);
 };
 
@@ -175,7 +184,7 @@ export const useAuth = () => {
   const signUp = async (email: string, password: string, name?: string) => {
     try {
       setLoading(true);
-      const redirectUrl = `${window.location.origin}/dashboard`;
+      const redirectUrl = getDashboardUrl();
       
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -305,7 +314,7 @@ export const useAuth = () => {
   const resetPassword = async (email: string) => {
     try {
       setLoading(true);
-      const redirectUrl = `${window.location.origin}/dashboard`;
+      const redirectUrl = getDashboardUrl();
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl,
@@ -343,7 +352,7 @@ export const useAuth = () => {
   const signInWithGoogle = async () => {
     try {
       setLoading(true);
-      const redirectUrl = `${window.location.origin}/dashboard`;
+      const redirectUrl = getDashboardUrl();
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
