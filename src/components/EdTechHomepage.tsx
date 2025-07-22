@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,6 +6,7 @@ import FlashcardCounter from './FlashcardCounter';
 import SubjectCarousel from './SubjectCarousel';
 import SignInDialog from './SignInDialog';
 import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import { 
   Users, 
   Star, 
@@ -25,6 +25,7 @@ const EdTechHomepage = () => {
   const [signInMode, setSignInMode] = useState<'signin' | 'signup'>('signin');
 
   const { user, signOut, loading } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,7 +58,7 @@ const EdTechHomepage = () => {
   const handleEnrolClick = () => {
     if (user) {
       // User is already logged in, navigate to dashboard
-      window.location.href = 'https://gcseanki.co.uk/test-dashboard';
+      navigate('/dashboard');
       return;
     }
     setSignInMode('signup');
@@ -65,7 +66,7 @@ const EdTechHomepage = () => {
   };
 
   const handleDashboardClick = () => {
-    window.location.href = 'https://gcseanki.co.uk/test-dashboard';
+    navigate('/dashboard');
   };
 
   const handleSignOut = async () => {
