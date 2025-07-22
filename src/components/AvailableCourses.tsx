@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { GraduationCap, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Course {
   id: string;
@@ -22,6 +23,7 @@ interface Course {
 export const AvailableCourses = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data: courses, isLoading, error } = useQuery({
     queryKey: ['available-courses'],
@@ -50,9 +52,13 @@ export const AvailableCourses = () => {
 
   const enrollMutation = useMutation({
     mutationFn: async (courseId: string) => {
+      if (!user) {
+        throw new Error('User must be logged in to enroll');
+      }
+
       const { data, error } = await supabase
         .from('enrollments')
-        .insert([{ course_id: courseId }])
+        .insert([{ course_id: courseId, user_id: user.id }])
         .select();
 
       if (error) throw error;
@@ -77,6 +83,14 @@ export const AvailableCourses = () => {
   });
 
   const handleEnroll = (courseId: string) => {
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to enroll in courses.",
+        variant: "destructive",
+      });
+      return;
+    }
     enrollMutation.mutate(courseId);
   };
 
@@ -168,7 +182,7 @@ export const AvailableCourses = () => {
                     ) : (
                       <Button 
                         onClick={() => handleEnroll(course.id)}
-                        disabled={enrollMutation.isPending}
+                        disabled={enrollMutation.isPending || !user}
                         className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
                       >
                         {enrollMutation.isPending ? 'Enrolling...' : 'Enroll Now'}
