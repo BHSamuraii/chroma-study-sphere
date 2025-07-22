@@ -21,7 +21,7 @@ const EdTechHomepage = () => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isSignInOpen, setIsSignInOpen] = useState(false);
-  const [signInMode, setSignInMode<'signin' | 'signup'>>('signin');
+  const [signInMode, setSignInMode] = useState<'signin' | 'signup'>('signin');
 
   const { user, signOut, loading } = useAuth();
 
